@@ -1,0 +1,10 @@
+build/
+dist/
+np.ini
+np.spec
+*.pyc
+__pycache__/
+.DS_Store
+.venv/
+
+config.toml

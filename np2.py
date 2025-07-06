@@ -19,7 +19,7 @@ logger.addHandler(handler)
 logger.setLevel(logging.INFO)
 
 
-CONFIG_FILE_PATH = "./np.toml"
+CONFIG_FILE_PATH = "./config.toml"
 
 
 class Config(t.TypedDict):
@@ -66,9 +66,9 @@ def get_song(path: Path) -> Song | None:
         title = lines[1]
         system = lines[2]
         return Song(
-            game.decode("utf-8", "ignore"),
-            title.decode("utf-8", "ignore"),
-            system.decode("utf-8", "ignore"),
+            game.decode("utf-8", "ignore").strip(),
+            title.decode("utf-8", "ignore").strip(),
+            system.decode("utf-8", "ignore").strip(),
         )
     except Exception as e:
         logger.error("Failed to read song file", e)

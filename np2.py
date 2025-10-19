@@ -1,11 +1,12 @@
 #!/usr/bin/env uv run --with watchdog --with requests>=2
+import logging
+import tomllib
+import typing as t
 from dataclasses import dataclass
 from pathlib import Path
-from watchfiles import watch
+
 import requests
-import tomllib
-import logging
-import typing as t
+from watchfiles import watch
 
 logger = logging.getLogger("now-playing")
 logger.propagate = False
@@ -75,6 +76,7 @@ def get_song(path: Path) -> Song | None:
 
 
 def update_remote_song_data(config: Config, song: Song):
+    logger.info(f"Song data: {song.format_game()} - {song.format_title()}")
     try:
         request = requests.post(
             config["api_url"],
@@ -87,11 +89,10 @@ def update_remote_song_data(config: Config, song: Song):
             headers={"charset": "utf-8"},
         )
         request.raise_for_status()
-        logger.info("Song successfully updated")
+        logger.info("- Song successfully updated")
     except Exception as e:
-        logger.error("Failed to submit song to target")
-        logger.error(f"Song data: {song.format_game()} - {song.format_title()}")
-        logger.error("Request error: %s", e)
+        logger.error("- Failed to submit song to target")
+        logger.error("- Request error: %s", e)
 
 
 def loop(config: Config):
